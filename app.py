@@ -1,8 +1,9 @@
 """
 streamlit_app.py
-CY4053 Secure FinTech Assignment 2
+CY4053 Secure Coding Assignment 2
 Final version — Hamza Abbasi
-Completely restyled (light blue / silver theme) with secure functionality
+Application Name: Cyber Guard
+Light blue / silver theme with secure features (login, encryption, wallets, logs)
 """
 
 import os
@@ -20,8 +21,8 @@ import streamlit as st
 # ---------------------------
 # Config
 # ---------------------------
-DB_PATH = "secure_fintech.db"
-KEY_PATH = "secret.key"
+DB_PATH = "cyber_guard.db"
+KEY_PATH = "cyber_guard.key"
 ALLOWED_TYPES = ["png", "jpg", "jpeg", "pdf", "csv", "txt"]
 MAX_SIZE = 5 * 1024 * 1024
 
@@ -33,11 +34,11 @@ def inject_style():
         <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
         .stApp {
-            background: linear-gradient(145deg, #e8f1ff, #f6f9fc);
+            background: linear-gradient(145deg, #eaf3ff, #f6f9fc);
             color: #1a1a1a;
             font-family: "Poppins", sans-serif;
         }
-        h1,h2,h3 { color:#2a4b8d; font-weight:600; }
+        h1,h2,h3 { color:#204c89; font-weight:600; }
         .stButton>button {
             background-color:#2a6be0;
             color:white;
@@ -200,12 +201,12 @@ def get_txns(wallet_id):
 # UI Pages
 # ---------------------------
 def show_home():
-    st.title("🔐 Secure FinTech Mini-App")
-    st.markdown("This lightweight app demonstrates **secure coding** practices for CY4053 Assignment 2.")
-    st.info("Use the sidebar to navigate through secure features — registration, login, wallets, encryption, and logs.")
+    st.title("🛡 Cyber Guard")
+    st.markdown("A secure FinTech mini-app developed for **CY4053 Assignment 2**.")
+    st.info("Cyber Guard demonstrates secure registration, login, encrypted data storage, and cybersecurity practices.")
 
 def show_auth():
-    st.header("User Access")
+    st.header("User Access Portal")
     tab1, tab2 = st.tabs(["🔑 Login","📝 Register"])
     with tab1:
         u = st.text_input("Username")
@@ -226,7 +227,7 @@ def show_auth():
             st.success(msg) if ok else st.error(msg)
 
 def show_wallets():
-    st.header("💼 Wallets & Transactions")
+    st.header("💼 Encrypted Wallets")
     if "uid" not in st.session_state or not st.session_state["uid"]:
         st.warning("Please login first."); return
     with st.form("wform"):
@@ -246,7 +247,7 @@ def show_wallets():
             num=st.text_input("Transaction Number",key=f"tx{w['id']}")
             if st.button("Add",key=f"b{w['id']}"):
                 ok,msg=add_txn(w["id"],num); st.success(msg) if ok else st.error(msg)
-        if st.button(f"View Txns {w['wallet_name']}",key=f"v{w['id']}"):
+        if st.button(f"View Transactions {w['wallet_name']}",key=f"v{w['id']}"):
             tx=get_txns(w["id"])
             if not tx: st.info("No transactions.")
             else:
@@ -254,7 +255,7 @@ def show_wallets():
                 st.dataframe(df,use_container_width=True)
 
 def show_logs():
-    st.header("Activity Logs")
+    st.header("User Activity Logs")
     if "uid" not in st.session_state: st.warning("Login to view logs."); return
     conn=get_conn();c=conn.cursor()
     c.execute("SELECT action,details,timestamp FROM logs WHERE user_id=? ORDER BY id DESC",(st.session_state["uid"],))
@@ -277,8 +278,8 @@ def show_file_upload():
 # ---------------------------
 def main():
     inject_style(); init_db(); init_crypto()
-    st.sidebar.title("🔷 Navigation")
-    page=st.sidebar.radio("Go to:",["Home","Authentication","Wallets","File Upload","Logs"])
+    st.sidebar.title("Cyber Guard")
+    page=st.sidebar.radio("Navigate:",["Home","Authentication","Wallets","File Upload","Logs"])
     st.sidebar.markdown("---")
     if "uid" in st.session_state and st.session_state["uid"]:
         st.sidebar.success(f"Logged in as {st.session_state['uname']}")
@@ -293,4 +294,5 @@ def main():
 
 if __name__=="__main__":
     main()
+
 
