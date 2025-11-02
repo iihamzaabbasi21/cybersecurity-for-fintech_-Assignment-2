@@ -1,9 +1,9 @@
-"""
+
 streamlit_app.py
 CY4053 Secure Coding Assignment 2
-Final version — Hamza Abbasi
-App Name: Cyber Guard (Green Edition)
-"""
+ Hamza Abbasi
+App Name: Cyber Guard Fintech
+
 
 import os, re, time, sqlite3, bcrypt, pandas as pd, random, string
 from datetime import datetime
