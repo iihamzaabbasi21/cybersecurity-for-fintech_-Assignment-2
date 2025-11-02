@@ -2,7 +2,7 @@
 streamlit_app.py
 CY4053 Secure Coding Assignment 2
 Final version — Hamza Abbasi
-App Name: Cyber Guard 
+App Name: Cyber Guard — FinTech Application
 """
 
 import os, re, time, sqlite3, bcrypt, pandas as pd, random, string
@@ -215,12 +215,12 @@ def get_txns(wallet_id):
 # UI Pages
 # ---------------------------
 def show_home():
-    st.title("🛡 Cyber Guard — Green Edition")
+    st.title("🛡 Cyber Guard — FinTech Application")
     st.markdown("Welcome to **Cyber Guard**, a secure FinTech web app for CY4053.")
-    st.success("Now with a clean green cyber theme 🌿 for enhanced visibility and unique design.")
+    st.success("This system demonstrates secure login, encryption, and safe data handling practices.")
 
 def show_auth():
-    st.header("Access Portal")
+    st.header("User Authentication")
     tab1, tab2 = st.tabs(["🔐 Login","🧾 Register"])
     with tab1:
         u = st.text_input("Username")
@@ -241,7 +241,7 @@ def show_auth():
             st.success(msg) if ok else st.error(msg)
 
 def show_wallets():
-    st.header("💼 Encrypted Wallets")
+    st.header("💼 Wallets & Transactions")
     if "uid" not in st.session_state or not st.session_state["uid"]:
         st.warning("Please login first."); return
     with st.form("wform"):
@@ -269,7 +269,7 @@ def show_wallets():
                 st.dataframe(df,use_container_width=True)
 
 def show_logs():
-    st.header("🧾 User Logs")
+    st.header("User Activity Logs")
     if "uid" not in st.session_state: st.warning("Login to view logs."); return
     conn=get_conn();c=conn.cursor()
     c.execute("SELECT action,details,timestamp FROM logs WHERE user_id=? ORDER BY id DESC",(st.session_state["uid"],))
@@ -279,7 +279,7 @@ def show_logs():
     st.dataframe(df,use_container_width=True)
 
 def show_file_upload():
-    st.header("📁 Secure File Upload")
+    st.header("Secure File Upload")
     f=st.file_uploader("Upload File",type=ALLOWED_TYPES)
     if f:
         if f.size>MAX_SIZE:
@@ -292,7 +292,7 @@ def show_file_upload():
 # ---------------------------
 def main():
     inject_style(); init_db(); init_crypto()
-    st.sidebar.title("💚 Cyber Guard")
+    st.sidebar.title("💚 Cyber Guard — FinTech Application")
     page=st.sidebar.radio("Navigate:",["Home","Authentication","Wallets","File Upload","Logs"])
     st.sidebar.markdown("---")
     if "uid" in st.session_state and st.session_state["uid"]:
@@ -308,6 +308,7 @@ def main():
 
 if __name__=="__main__":
     main()
+
 
    
 
