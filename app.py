@@ -2,19 +2,12 @@
 streamlit_app.py
 CY4053 Secure Coding Assignment 2
 Final version — Hamza Abbasi
-Application Name: Cyber Guard
-Light blue / silver theme with secure features (login, encryption, wallets, logs)
+App Name: Cyber Guard (Green Edition)
 """
 
-import os
-import re
-import time
-import sqlite3
-import bcrypt
-import pandas as pd
-import random, string
-from io import BytesIO
+import os, re, time, sqlite3, bcrypt, pandas as pd, random, string
 from datetime import datetime
+from io import BytesIO
 from cryptography.fernet import Fernet
 import streamlit as st
 
@@ -27,40 +20,61 @@ ALLOWED_TYPES = ["png", "jpg", "jpeg", "pdf", "csv", "txt"]
 MAX_SIZE = 5 * 1024 * 1024
 
 # ---------------------------
-# Style / Theme
+# Styling / Theme (Green)
 # ---------------------------
 def inject_style():
     st.markdown("""
         <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
         .stApp {
-            background: linear-gradient(145deg, #eaf3ff, #f6f9fc);
-            color: #1a1a1a;
-            font-family: "Poppins", sans-serif;
+            background: linear-gradient(135deg, #0b3d2e 0%, #021a13 100%);
+            color: #e6ffe6;
+            font-family: 'Poppins', sans-serif;
         }
-        h1,h2,h3 { color:#204c89; font-weight:600; }
+        h1,h2,h3 {
+            color: #00e676;
+            text-shadow: 0 0 6px rgba(0,255,100,0.4);
+        }
         .stButton>button {
-            background-color:#2a6be0;
-            color:white;
-            border:none;
-            border-radius:8px;
-            padding:8px 16px;
-            font-weight:600;
-            box-shadow:0 4px 10px rgba(42,107,224,0.25);
+            background-color: #00c36f;
+            color: #001a0f;
+            border: none;
+            border-radius: 8px;
+            padding: 8px 16px;
+            font-weight: 600;
+            box-shadow: 0 0 15px rgba(0,255,150,0.2);
         }
-        .stTextInput>div>div>input, .stTextArea>div>div>textarea {
-            background:#fff;
-            color:#222;
-            border-radius:6px;
-            border:1px solid #bcd0f7;
-            padding:6px;
+        .stTextInput>div>div>input,
+        .stTextArea>div>div>textarea {
+            background: rgba(255,255,255,0.05);
+            color: #dfffe3;
+            border: 1px solid #00c36f;
+            border-radius: 6px;
+        }
+        .stSidebar {
+            background: linear-gradient(180deg, #003d2e, #00261f);
+        }
+        .stSidebar h1, .stSidebar h2, .stSidebar h3, .stSidebar label {
+            color: #00ff99 !important;
+        }
+        .stRadio>div>label>div[data-testid="stMarkdownContainer"] p {
+            color: #00e676 !important;
+        }
+        .stTabs [data-baseweb="tab-list"] {
+            background-color: #00261f;
+        }
+        .stTabs [data-baseweb="tab"] {
+            color: #00e676 !important;
+        }
+        .stTabs [aria-selected="true"] {
+            background-color: #004d3a !important;
+            border-radius: 6px;
         }
         .section {
-            background:rgba(255,255,255,0.8);
-            border-radius:12px;
-            padding:16px;
-            margin-top:10px;
-            box-shadow:0 4px 10px rgba(0,0,0,0.05);
+            background: rgba(0, 40, 30, 0.4);
+            border-radius: 10px;
+            padding: 14px;
+            box-shadow: 0 0 15px rgba(0,255,150,0.1);
         }
         </style>
     """, unsafe_allow_html=True)
@@ -201,13 +215,13 @@ def get_txns(wallet_id):
 # UI Pages
 # ---------------------------
 def show_home():
-    st.title("🛡 Cyber Guard")
-    st.markdown("A secure FinTech mini-app developed for **CY4053 Assignment 2**.")
-    st.info("Cyber Guard demonstrates secure registration, login, encrypted data storage, and cybersecurity practices.")
+    st.title("🛡 Cyber Guard — Green Edition")
+    st.markdown("Welcome to **Cyber Guard**, a secure FinTech web app for CY4053.")
+    st.success("Now with a clean green cyber theme 🌿 for enhanced visibility and unique design.")
 
 def show_auth():
-    st.header("User Access Portal")
-    tab1, tab2 = st.tabs(["🔑 Login","📝 Register"])
+    st.header("Access Portal")
+    tab1, tab2 = st.tabs(["🔐 Login","🧾 Register"])
     with tab1:
         u = st.text_input("Username")
         p = st.text_input("Password", type="password")
@@ -255,7 +269,7 @@ def show_wallets():
                 st.dataframe(df,use_container_width=True)
 
 def show_logs():
-    st.header("User Activity Logs")
+    st.header("🧾 User Logs")
     if "uid" not in st.session_state: st.warning("Login to view logs."); return
     conn=get_conn();c=conn.cursor()
     c.execute("SELECT action,details,timestamp FROM logs WHERE user_id=? ORDER BY id DESC",(st.session_state["uid"],))
@@ -265,7 +279,7 @@ def show_logs():
     st.dataframe(df,use_container_width=True)
 
 def show_file_upload():
-    st.header("Secure File Upload")
+    st.header("📁 Secure File Upload")
     f=st.file_uploader("Upload File",type=ALLOWED_TYPES)
     if f:
         if f.size>MAX_SIZE:
@@ -278,7 +292,7 @@ def show_file_upload():
 # ---------------------------
 def main():
     inject_style(); init_db(); init_crypto()
-    st.sidebar.title("Cyber Guard")
+    st.sidebar.title("💚 Cyber Guard")
     page=st.sidebar.radio("Navigate:",["Home","Authentication","Wallets","File Upload","Logs"])
     st.sidebar.markdown("---")
     if "uid" in st.session_state and st.session_state["uid"]:
@@ -294,5 +308,7 @@ def main():
 
 if __name__=="__main__":
     main()
+
+   
 
 
